@@ -24,7 +24,7 @@ with open("README.rst", encoding="utf-8") as f:
 setup(
     name="TgCrypto",
     version="0.0.1b1",
-    description="Telegram Crypto for Pyrogram",
+    description="Telegram Crypto Library for Pyrogram",
     url="https://github.com/pyrogram/tgcrypto",
     author="Dan Tès",
     author_email="admin@pyrogram.ml",
