@@ -20,9 +20,9 @@ Table of Contents
 About
 =====
 
-**TgCrypto** is a high-performance, easy-to-install Telegram Crypto Library specifically written in C for Pyrogram [#f1]_ as a
-Python extension. TgCrypto is a replacement for the much slower PyAES and implements the crypto algorithms Telegram requires,
-namely **AES-IGE 256 bit** (used in MTProto v2.0) and **AES-CTR 256 bit** (used for CDN encrypted files).
+**TgCrypto** is a high-performance, easy-to-install Telegram Crypto Library written in C as a Python extension.
+TgCrypto is intended for Pyrogram [#f1]_ and implements the crypto algorithms Telegram requires, namely
+**AES-IGE 256 bit** (used in MTProto v2.0) and **AES-CTR 256 bit** (used for CDN encrypted files).
 
 Installation
 ============
@@ -31,8 +31,9 @@ Installation
 
     $ pip install --upgrade tgcrypto
 
-**Note:** Being a C extension for Python, TgCrypto is an optional but *highly recommended* dependency; when TgCrypto
-is not detected in your system, Pyrogram will automatically fall back to PyAES and will show you a warning.
+**Note:** Being a C extension for Python, TgCrypto is an optional but *highly recommended* Pyrogram_ dependency;
+if TgCrypto is not detected in your system, Pyrogram will automatically fall back to the much slower PyAES and will
+show you a warning.
 
 The reason about being an optional package is that TgCrypto requires some extra system tools in order to be compiled.
 The errors you receive when trying to install TgCrypto are system dependent, but also descriptive enough to understand
@@ -111,7 +112,7 @@ License
 -----
 
 .. [#f1] Although TgCrypto is intended for `Pyrogram`_, it is shipped as a standalone package and can thus be used for
-   other Python projects too.
+   any other Python project too.
 
 .. _`Community`: https://t.me/PyrogramChat
 
@@ -135,7 +136,7 @@ License
     </h1>
 
     <p align="center">
-        <b>Telegram Crypto Library for <a href="https://github.com/pyrogram/pyrogram">Pyrogram</a></b>
+        <b>Fast Telegram Crypto Library for Python</b>
 
         <br>
         <a href="https://pypi.python.org/pypi/TgCrypto">
@@ -149,10 +150,15 @@ License
         <a href="https://t.me/PyrogramChat">
             Community
         </a>
+        <br><br>
+        <a href="https://github.com/pyrogram/tgcrypto">
+            <img src="https://www.pyrogram.ml/images/tgcrypto_version.svg"
+                alt="TgCrypto">
+        </a>
     </p>
 
 .. |logo| image:: https://pyrogram.ml/images/tgcrypto_logo.png
     :target: https://github.com/pyrogram/tgcrypto
     :alt: TgCrypto
 
-.. |description| replace:: **Telegram Crypto Library for Pyrogram**
+.. |description| replace:: **Fast Telegram Crypto Library for Python**
