@@ -26,7 +26,7 @@ with open("README.rst", encoding="utf-8") as f:
 
 setup(
     name="TgCrypto",
-    version="1.0.1",
+    version="1.0.2",
     description="Fast Telegram Crypto Library for Python",
     url="https://github.com/pyrogram/tgcrypto",
     author="Dan Tès",
