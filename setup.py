@@ -17,9 +17,12 @@
 # along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from setuptools import setup, Extension, find_packages
+import re
 
+# PyPI doesn't like raw html
 with open("README.rst", encoding="utf-8") as f:
-    readme = f.read()
+    readme = re.sub(r"\.\. \|.+\| raw:: html(?:\s{4}.+)+\n\n", "", f.read())
+    readme = re.sub(r"\|header\|", "|logo|\n\n|description|", readme)
 
 setup(
     name="TgCrypto",
