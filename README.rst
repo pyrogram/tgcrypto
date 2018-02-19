@@ -7,6 +7,10 @@ Table of Contents
 
 -   `Installation`_
 
+-   `API`_
+
+-   `Usage`_
+
 -   `Contribution`_
 
 -   `Feedback`_
@@ -38,6 +42,46 @@ what you should do next:
 -  **macOS**: A pop-up will automatically ask you to install the command line developer tools.
 -  **Linux**: Install a proper C compiler (``gcc``, ``clang``) and the Python header files (``python3-dev``).
 -  **Termux (Android)**: Install ``clang`` and ``python-dev`` packages.
+
+API
+===
+
+TgCrypto API consists of these four functions:
+
+.. code-block:: python
+
+    def ige_encrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
+
+.. code-block:: python
+
+    def ige_decrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
+
+.. code-block:: python
+
+    def ctr_encrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
+
+.. code-block:: python
+
+    def ctr_decrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
+
+Usage
+=====
+
+TgCrypto is as simple as this example:
+
+.. code-block:: python
+
+    import os
+    import tgcrypto
+
+    data = os.urandom(10 * 1024 * 1024)  # 10 MB of random data
+    key = os.urandom(32)  # Random Key
+    iv = os.urandom(32)  # Random IV
+
+    ige_encrypted = tgcrypto.ige_encrypt(data, key, iv)
+    ige_decrypted = tgcrypto.ige_decrypt(ige_encrypted, key, iv)
+
+    assert data == ige_decrypted
 
 Contribution
 ============
@@ -89,10 +133,10 @@ License
             <div><img src="https://pyrogram.ml/images/tgcrypto.png" alt="TgCrypto Logo"></div>
         </a>
     </h1>
-    
+
     <p align="center">
         <b>Telegram Crypto Library for <a href="https://github.com/pyrogram/pyrogram">Pyrogram</a></b>
-        
+
         <br>
         <a href="https://pypi.python.org/pypi/TgCrypto">
             Download
@@ -106,3 +150,9 @@ License
             Community
         </a>
     </p>
+
+.. |logo| image:: https://pyrogram.ml/images/tgcrypto_logo.png
+    :target: https://github.com/pyrogram/tgcrypto
+    :alt: TgCrypto
+
+.. |description| replace:: **Telegram Crypto Library for Pyrogram**
