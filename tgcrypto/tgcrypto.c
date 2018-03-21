@@ -17,6 +17,7 @@
 // along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <Python.h>
+#include "aes256.h"
 #include "ige256.h"
 #include "ctr256.h"
 
