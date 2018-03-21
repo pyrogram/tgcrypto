@@ -23,12 +23,12 @@ uint8_t *ige256(const uint8_t in[], uint32_t length, const uint8_t key[32], cons
     uint8_t iv_1[AES_BLOCK_SIZE], iv_2[AES_BLOCK_SIZE];
     uint8_t chunk[AES_BLOCK_SIZE], buffer[AES_BLOCK_SIZE];
     uint32_t key_schedule[KEY_SCHEDULE_SIZE];
+    uint32_t i, j;
 
     memcpy(encrypt ? iv_1 : iv_2, (uint8_t *) iv, AES_BLOCK_SIZE);
     memcpy(encrypt ? iv_2 : iv_1, (uint8_t *) iv + AES_BLOCK_SIZE, AES_BLOCK_SIZE);
     aes256_key_expansion(key, key_schedule);
 
-    uint32_t i, j;
     for (i = 0; i < length; i += AES_BLOCK_SIZE) {
         memcpy(chunk, &in[i], AES_BLOCK_SIZE);
 

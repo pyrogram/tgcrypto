@@ -22,12 +22,12 @@ uint8_t *ctr256(const uint8_t in[], uint32_t length, const uint8_t key[32], cons
     uint8_t *out = (uint8_t *) malloc(length * sizeof(uint8_t));
     uint8_t iv_buf[AES_BLOCK_SIZE], out_buf[AES_BLOCK_SIZE];
     uint32_t key_schedule[KEY_SCHEDULE_SIZE];
+	uint32_t i, j;
 
     memcpy(out, in, length);
     memcpy(iv_buf, iv, AES_BLOCK_SIZE);
     aes256_key_expansion(key, key_schedule);
 
-    uint32_t i = 0, j;
     if (length > AES_BLOCK_SIZE)
         for (i = 0; i < length - AES_BLOCK_SIZE; i += AES_BLOCK_SIZE) {
             aes256_encrypt(iv_buf, out_buf, key_schedule);

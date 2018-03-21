@@ -24,6 +24,7 @@
 static PyObject* tgcrypto(PyObject *args, uint8_t mode, uint8_t encrypt) {
     Py_buffer data, key, iv;
     uint8_t *(*fn)(), *buf;
+    PyObject* out;
 
     PyArg_ParseTuple(args, "y*y*y*", &data, &key, &iv);
     fn = encrypt? mode? ctr256_encrypt: ige256_encrypt: mode? ctr256_decrypt: ige256_decrypt;
@@ -33,7 +34,7 @@ static PyObject* tgcrypto(PyObject *args, uint8_t mode, uint8_t encrypt) {
     PyBuffer_Release(&key);
     PyBuffer_Release(&iv);
 
-    PyObject* out = Py_BuildValue("y#", buf, data.len);
+    out = Py_BuildValue("y#", buf, data.len);
     free(buf);
 
     return out;
