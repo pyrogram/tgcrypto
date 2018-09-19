@@ -17,18 +17,19 @@
 // along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <Python.h>
+
 #include "aes256.h"
 #include "ige256.h"
 #include "ctr256.h"
 
-static PyObject* tgcrypto(PyObject *args, uint8_t mode, uint8_t encrypt) {
+static PyObject* ige(PyObject *args, uint8_t encrypt) {
     Py_buffer data, key, iv;
-    uint8_t *(*fn)(), *buf;
-    PyObject* out;
+    uint8_t *buf;
+    PyObject *out;
 
     PyArg_ParseTuple(args, "y*y*y*", &data, &key, &iv);
-    fn = encrypt? mode? ctr256_encrypt: ige256_encrypt: mode? ctr256_decrypt: ige256_decrypt;
-    buf = fn(data.buf, data.len, key.buf, iv.buf);
+
+    buf = ige256(data.buf, data.len, key.buf, iv.buf, encrypt);
 
     PyBuffer_Release(&data);
     PyBuffer_Release(&key);
@@ -40,30 +41,39 @@ static PyObject* tgcrypto(PyObject *args, uint8_t mode, uint8_t encrypt) {
     return out;
 }
 
-static PyObject* ige_encrypt(PyObject *self, PyObject *args) {
-    return tgcrypto(args, 0, 1);
+static PyObject *ige256_encrypt(PyObject *self, PyObject *args) {
+    return ige(args, 1);
 }
 
-
-static PyObject* ige_decrypt(PyObject *self, PyObject *args) {
-    return tgcrypto(args, 0, 0);
+static PyObject *ige256_decrypt(PyObject *self, PyObject *args) {
+    return ige(args, 0);
 }
 
-static PyObject* ctr_encrypt(PyObject *self, PyObject *args) {
-    return tgcrypto(args, 1, 1);
-}
+static PyObject *ctr256_encrypt(PyObject *self, PyObject *args) {
+    Py_buffer data, key, iv, state;
+    uint8_t *buf;
+    PyObject *out;
 
+    PyArg_ParseTuple(args, "y*y*y*y*", &data, &key, &iv, &state);
 
-static PyObject* ctr_decrypt(PyObject *self, PyObject *args) {
-    return tgcrypto(args, 1, 0);
+    buf = ctr256(data.buf, data.len, key.buf, iv.buf, state.buf);
+
+    PyBuffer_Release(&data);
+    PyBuffer_Release(&key);
+    PyBuffer_Release(&iv);
+
+    out = Py_BuildValue("y#", buf, data.len);
+    free(buf);
+
+    return out;
 }
 
 static PyMethodDef methods[] = {
-    {"ige_encrypt", (PyCFunction) ige_encrypt, METH_VARARGS, "AES-256-IGE Encryption"},
-    {"ige_decrypt", (PyCFunction) ige_decrypt, METH_VARARGS, "AES-256-IGE Decryption"},
-    {"ctr_encrypt", (PyCFunction) ctr_encrypt, METH_VARARGS, "AES-256-CTR Encryption"},
-    {"ctr_decrypt", (PyCFunction) ctr_decrypt, METH_VARARGS, "AES-256-CTR Decryption"},
-    {NULL,      NULL,                      0,            NULL}
+    {"ige256_encrypt", (PyCFunction) ige256_encrypt, METH_VARARGS, "AES-256-IGE Encryption"},
+    {"ige256_decrypt", (PyCFunction) ige256_decrypt, METH_VARARGS, "AES-256-IGE Decryption"},
+    {"ctr256_encrypt", (PyCFunction) ctr256_encrypt, METH_VARARGS, "AES-256-CTR Encryption"},
+    {"ctr256_decrypt", (PyCFunction) ctr256_encrypt, METH_VARARGS, "AES-256-CTR Decryption"},
+    {NULL, NULL, 0, NULL}
 };
 
 static struct PyModuleDef module = {

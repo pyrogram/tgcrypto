@@ -19,8 +19,6 @@
 #ifndef CTR256_H
 #define CTR256_H
 
-uint8_t *ctr256_encrypt(const uint8_t in[], uint32_t length, const uint8_t key[32], const uint8_t iv[16]);
+uint8_t *ctr256(const uint8_t in[], uint32_t length, const uint8_t key[32], const uint8_t iv[16], uint8_t *state);
 
-uint8_t *ctr256_decrypt(const uint8_t in[], uint32_t length, const uint8_t key[32], const uint8_t iv[16]);
-
-#endif //IGE256_H
+#endif  // CTR256_H

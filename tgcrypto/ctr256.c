@@ -18,40 +18,34 @@
 
 #include "aes256.h"
 
-uint8_t *ctr256(const uint8_t in[], uint32_t length, const uint8_t key[32], const uint8_t iv[16]) {
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
+
+uint8_t *ctr256(const uint8_t in[], uint32_t length, const uint8_t key[32], uint8_t iv[16], uint8_t *state) {
     uint8_t *out = (uint8_t *) malloc(length * sizeof(uint8_t));
-    uint8_t iv_buf[AES_BLOCK_SIZE], out_buf[AES_BLOCK_SIZE];
-    uint32_t key_schedule[KEY_SCHEDULE_SIZE];
-    uint32_t i, j;
+    uint8_t chunk[AES_BLOCK_SIZE];
+    uint32_t expandedKey[EXPANDED_KEY_SIZE];
+    uint32_t i, j, k;
 
     memcpy(out, in, length);
-    memcpy(iv_buf, iv, AES_BLOCK_SIZE);
-    aes256_key_expansion(key, key_schedule);
+    aes256_set_encryption_key(key, expandedKey);
 
-    if (length > AES_BLOCK_SIZE)
-        for (i = 0; i < length - AES_BLOCK_SIZE; i += AES_BLOCK_SIZE) {
-            aes256_encrypt(iv_buf, out_buf, key_schedule);
+    aes256_encrypt(iv, chunk, expandedKey);
 
-            for (j = 0; j < AES_BLOCK_SIZE; ++j)
-                out[i + j] ^= out_buf[j];
+    for (i = 0; i < length; i += AES_BLOCK_SIZE)
+        for (j = 0; j < MIN(length - i, AES_BLOCK_SIZE); ++j) {
+            out[i + j] ^= chunk[(*state)++];
 
-            for (j = AES_BLOCK_SIZE - 1; j >= 0; --j)
-                if (++iv_buf[j])
-                    break;
+            if (*state >= AES_BLOCK_SIZE)
+                *state = 0;
+
+            if (*state == 0) {
+                for (k = AES_BLOCK_SIZE - 1; k >= 0; --k)
+                    if (++iv[k])
+                        break;
+
+                aes256_encrypt(iv, chunk, expandedKey);
+            }
         }
 
-    aes256_encrypt(iv_buf, out_buf, key_schedule);
-
-    for (j = 0; j < length - i; ++j)
-        out[i + j] ^= out_buf[j];
-
     return out;
-}
-
-uint8_t *ctr256_encrypt(uint8_t *in, uint32_t length, uint8_t *key, uint8_t *iv) {
-    return ctr256(in, length, key, iv);
-}
-
-uint8_t *ctr256_decrypt(uint8_t *in, uint32_t length, uint8_t *key, uint8_t *iv) {
-    return ctr256(in, length, key, iv);
 }

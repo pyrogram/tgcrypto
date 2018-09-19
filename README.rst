@@ -47,28 +47,51 @@ what you should do next:
 API
 ===
 
-TgCrypto API consists of these four functions:
+TgCrypto API consists of these four methods:
 
 .. code-block:: python
 
-    def ige_encrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
+    def ige256_encrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
 
 .. code-block:: python
 
-    def ige_decrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
+    def ige256_decrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
 
 .. code-block:: python
 
-    def ctr_encrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
+    def ctr256_encrypt(data: bytes, key: bytes, iv: bytes, state: bytes) -> bytes:
 
 .. code-block:: python
 
-    def ctr_decrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
+    def ctr256_decrypt(data: bytes, key: bytes, iv: bytes, state: bytes) -> bytes:
 
 Usage
 =====
 
-TgCrypto is as simple as this example:
+IGE Mode:
+---------
+
+**Note**: Data must be padded to match a multiple of the block size (16 bytes).
+
+.. code-block:: python
+
+    import os
+    import tgcrypto
+
+    data = os.urandom(10 * 1024 * 1024 + 7)  # 10 MB of random data + 7 bytes to show padding
+    key = os.urandom(32)  # Random Key
+    iv = os.urandom(32)  # Random IV
+
+    # Pad with zeroes: -7 % 16 = 9
+    data += bytes(-len(data) % 16)
+
+    ige_encrypted = tgcrypto.ige256_encrypt(data, key, iv)
+    ige_decrypted = tgcrypto.ige256_decrypt(ige_encrypted, key, iv)
+
+    print(data == ige_decrypted)  # True
+    
+CTR Mode (single chunk):
+------------------------
 
 .. code-block:: python
 
@@ -76,13 +99,61 @@ TgCrypto is as simple as this example:
     import tgcrypto
 
     data = os.urandom(10 * 1024 * 1024)  # 10 MB of random data
+    
     key = os.urandom(32)  # Random Key
-    iv = os.urandom(32)  # Random IV
 
-    ige_encrypted = tgcrypto.ige_encrypt(data, key, iv)
-    ige_decrypted = tgcrypto.ige_decrypt(ige_encrypted, key, iv)
+    enc_iv = bytearray(os.urandom(16))  # Random IV
+    dec_iv = enc_iv.copy()  # Keep a copy for decryption
 
-    assert data == ige_decrypted
+    ctr_encrypted = tgcrypto.ctr256_encrypt(data, key, enc_iv, bytes(1))
+    ctr_decrypted = tgcrypto.ctr256_decrypt(ctr_encrypted, key, dec_iv, bytes(1))
+
+    print(data == ctr_decrypted)  # True
+
+CTR Mode (stream):
+------------------
+
+.. code-block:: python
+
+    import os
+    import tgcrypto
+    from io import BytesIO
+
+    data = BytesIO(os.urandom(10 * 1024 * 1024))  # 10 MB of random data
+
+    key = os.urandom(32)  # Random Key
+
+    enc_iv = bytearray(os.urandom(16))  # Random IV
+    dec_iv = enc_iv.copy()  # Keep a copy for decryption
+
+    enc_state = bytes(1)  # Encryption state, starts from 0
+    dec_state = bytes(1)  # Decryption state, starts from 0
+
+    encrypted_data = BytesIO()  # Encrypted data buffer
+    decrypted_data = BytesIO()  # Decrypted data buffer
+
+    while True:
+        chunk = data.read(1024)
+
+        if not chunk:
+            break
+
+        # Write 1K encrypted bytes into the encrypted data buffer
+        encrypted_data.write(tgcrypto.ctr256_encrypt(chunk, key, enc_iv, enc_state))
+
+    # Reset position. We need to read it now
+    encrypted_data.seek(0)
+
+    while True:
+        chunk = encrypted_data.read(1024)
+
+        if not chunk:
+            break
+
+        # Write 1K decrypted bytes into the decrypted data buffer
+        decrypted_data.write(tgcrypto.ctr256_decrypt(chunk, key, dec_iv, dec_state))
+
+    print(data.getvalue() == decrypted_data.getvalue())  # True
 
 Contribution
 ============
@@ -130,8 +201,7 @@ License
 
     <h1 align="center">
         <a href="https://github.com/pyrogram/tgcrypto">
-            <div><img src="https://pyrogram.ml/images/icon.png" alt="Pyrogram Icon"></div>
-            <div><img src="https://pyrogram.ml/images/tgcrypto.png" alt="TgCrypto Logo"></div>
+            <div><img src="https://raw.githubusercontent.com/pyrogram/logos/master/logos/tgcrypto_logo2.png" alt="TgCrypto Logo"></div>
         </a>
     </h1>
 
@@ -151,13 +221,18 @@ License
             Community
         </a>
         <br><br>
+        <a href="https://github.com/pyrogram/pyrogram">
+            <img src="https://img.shields.io/badge/PYROGRAM-V0.8.0-eda738.svg?longCache=true&style=for-the-badge&colorA=262b30"
+                alt="TgCrypto">
+        </a>
+        
         <a href="https://github.com/pyrogram/tgcrypto">
-            <img src="https://www.pyrogram.ml/images/tgcrypto_version.svg"
+            <img src="https://img.shields.io/badge/TGCRYPTO-V1.1.1-eda738.svg?longCache=true&style=for-the-badge&colorA=262b30"
                 alt="TgCrypto">
         </a>
     </p>
 
-.. |logo| image:: https://pyrogram.ml/images/tgcrypto_logo.png
+.. |logo| image:: https://raw.githubusercontent.com/pyrogram/logos/master/logos/tgcrypto_logo2.png
     :target: https://github.com/pyrogram/tgcrypto
     :alt: TgCrypto
 

@@ -18,17 +18,26 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 
 #ifndef AES256_H
 #define AES256_H
 
 #define AES_BLOCK_SIZE 16
-#define KEY_SCHEDULE_SIZE 60
+#define EXPANDED_KEY_SIZE 60
 
-void aes256_key_expansion(const uint8_t key[32], uint32_t w[60]);
+#define LROTL(x) (((x) << 8) | ((x) >> 24))
+#define LROTR(x) ((x) >> 8) | ((x) << 24))
+#define SWAP(x) ((LROTL((x)) & 0x00ff00ff) | ((LROTR((x)) & 0xff00ff00))
+#define GET(p) SWAP(*((uint32_t *)(p)))
+#define PUT(ct, st) {*((uint32_t *)(ct)) = SWAP((st));}
 
-void aes256_encrypt(const uint8_t in[16], uint8_t out[16], const uint32_t w[60]);
+void aes256_set_encryption_key(const uint8_t key[32], uint32_t expandedKey[60]);
 
-void aes256_decrypt(const uint8_t in[16], uint8_t out[16], const uint32_t w[60]);
+void aes256_set_decryption_key(const uint8_t key[32], uint32_t expandedKey[60]);
 
-#endif   // AES256_H
+void aes256_encrypt(const uint8_t in[16], uint8_t out[16], const uint32_t expandedKey[60]);
+
+void aes256_decrypt(const uint8_t in[16], uint8_t out[16], const uint32_t expandedKey[60]);
+
+#endif  // AES256_H

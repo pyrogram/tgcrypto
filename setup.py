@@ -27,7 +27,7 @@ with open("README.rst", encoding="utf-8") as f:
 
 setup(
     name="TgCrypto",
-    version="1.0.4",
+    version="1.1.1",
     description="Fast Telegram Crypto Library for Python",
     long_description=readme,
     url="https://github.com/pyrogram",
@@ -65,7 +65,7 @@ setup(
         "Source": "https://github.com/pyrogram/tgcrypto",
         "Documentation": "https://docs.pyrogram.ml",
     },
-    python_requires="~=3.3",
+    python_requires="~=3.4",
     packages=find_packages(),
     zip_safe=False,
     ext_modules=[
