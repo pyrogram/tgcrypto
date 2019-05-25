@@ -14,7 +14,7 @@ requires, namely **AES-IGE 256 bit** (used in MTProto v2.0) and **AES-CTR 256 bi
 $ pip3 install --upgrade tgcrypto
 ```
 
-More info: https://docs.pyrogram.ml/topics/tgcrypto
+More info: https://docs.pyrogram.org/topics/tgcrypto
 
 ## API
 
