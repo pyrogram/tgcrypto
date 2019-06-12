@@ -35,7 +35,7 @@ uint8_t *ige256(const uint8_t in[], uint32_t length, const uint8_t key[32], cons
         for (j = 0; j < AES_BLOCK_SIZE; ++j)
             buffer[j] = in[i + j] ^ iv1[j];
 
-        (encrypt ? aes256_encrypt : aes256_decrypt)((uint8_t *) &buffer, &out[i], expandedKey);
+        (encrypt ? aes256_encrypt : aes256_decrypt)((uint8_t * ) & buffer, &out[i], expandedKey);
 
         for (j = 0; j < AES_BLOCK_SIZE; ++j)
             out[i + j] ^= iv2[j];
