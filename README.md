@@ -6,19 +6,23 @@
 
 **TgCrypto** is a high-performance, easy-to-install Telegram Crypto Library written in C as a Python extension.
 TgCrypto is intended for [Pyrogram](//github.com/pyrogram/pyrogram) and implements the crypto algorithms Telegram
-requires, namely **AES-IGE 256 bit** (used in MTProto v2.0) and **AES-CTR 256 bit** (used for CDN encrypted files).
+requires, namely:
+
+- **AES256-IGE** - used in [MTProto v2.0](https://core.telegram.org/mtproto).
+- **AES256-CTR** - used for [CDN encrypted files](https://core.telegram.org/cdn).
+- **AES256-CBC** - used for [encrypted passport credentials](https://core.telegram.org/passport).
 
 ## Installation
 
 ``` bash
-$ pip3 install --upgrade tgcrypto
+$ pip3 install -U tgcrypto
 ```
 
 More info: https://docs.pyrogram.org/topics/tgcrypto
 
 ## API
 
-TgCrypto API consists of these four methods:
+TgCrypto API consists of these six methods:
 
 ```python
 def ige256_encrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
@@ -28,6 +32,10 @@ def ige256_decrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
 def ctr256_encrypt(data: bytes, key: bytes, iv: bytes, state: bytes) -> bytes:
 
 def ctr256_decrypt(data: bytes, key: bytes, iv: bytes, state: bytes) -> bytes:
+
+def cbc256_encrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
+
+def cbc256_decrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
 ```
 
 ## Usage
@@ -38,6 +46,7 @@ def ctr256_decrypt(data: bytes, key: bytes, iv: bytes, state: bytes) -> bytes:
 
 ``` python
 import os
+
 import tgcrypto
 
 data = os.urandom(10 * 1024 * 1024 + 7)  # 10 MB of random data + 7 bytes to show padding
@@ -57,6 +66,7 @@ print(data == ige_decrypted)  # True
 
 ``` python
 import os
+
 import tgcrypto
 
 data = os.urandom(10 * 1024 * 1024)  # 10 MB of random data
@@ -76,8 +86,9 @@ print(data == ctr_decrypted)  # True
 
 ``` python
 import os
-import tgcrypto
 from io import BytesIO
+
+import tgcrypto
 
 data = BytesIO(os.urandom(10 * 1024 * 1024))  # 10 MB of random data
 
@@ -116,6 +127,30 @@ while True:
 print(data.getvalue() == decrypted_data.getvalue())  # True
 ```
 
+### CBC Mode
+
+**Note**: Data must be padded to match a multiple of the block size (16 bytes).
+
+``` python
+import os
+
+import tgcrypto
+
+data = os.urandom(10 * 1024 * 1024 + 7)  # 10 MB of random data + 7 bytes to show padding
+key = os.urandom(32)  # Random Key
+
+enc_iv = bytearray(os.urandom(16))  # Random IV
+dec_iv = enc_iv.copy()  # Keep a copy for decryption
+
+# Pad with zeroes: -7 % 16 = 9
+data += bytes(-len(data) % 16)
+
+cbc_encrypted = tgcrypto.cbc256_encrypt(data, key, enc_iv)
+cbc_decrypted = tgcrypto.cbc256_decrypt(cbc_encrypted, key, dec_iv)
+
+print(data == cbc_decrypted)  # True
+```
+
 ## Testing
 
 1. Install the package: `pip3 install -U tgcrypto`.
@@ -123,7 +158,7 @@ print(data.getvalue() == decrypted_data.getvalue())  # True
 3. Enter the directory: `cd tgcrypto`.
 4. Run tests: `python3 -m unittest`.
 
-**Note**: I haven't found any public test vectors for AES-IGE 256 bit, yet.
+**Note**: I haven't found any public test vectors for AES256-IGE, yet.
 
 ## License
 
