@@ -30,7 +30,7 @@ setup(
     url="https://github.com/pyrogram",
     download_url="https://github.com/pyrogram/tgcrypto/releases/latest",
     author="Dan",
-    author_email="admin@pyrogram.ml",
+    author_email="dan@pyrogram.org",
     license="LGPLv3+",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
@@ -58,9 +58,9 @@ setup(
     keywords="fast pyrogram telegram crypto mtproto api client library python",
     project_urls={
         "Tracker": "https://github.com/pyrogram/tgcrypto/issues",
-        "Community": "https://t.me/PyrogramChat",
+        "Community": "https://t.me/pyrogram",
         "Source": "https://github.com/pyrogram/tgcrypto",
-        "Documentation": "https://docs.pyrogram.ml",
+        "Documentation": "https://docs.pyrogram.org",
     },
     python_requires="~=3.4",
     packages=find_packages(),
