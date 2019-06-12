@@ -118,4 +118,4 @@ print(data.getvalue() == decrypted_data.getvalue())  # True
 
 ## License
 
-[LGPLv3+](COPYING.lesser) © 2017-2019 [Dan Tès](https://github.com/delivrance)
+[LGPLv3+](COPYING.lesser) © 2017-2019 [Dan](https://github.com/delivrance)
