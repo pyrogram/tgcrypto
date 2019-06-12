@@ -16,23 +16,20 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-import re
-
 from setuptools import setup, Extension, find_packages
 
-# PyPI doesn't like raw html
-with open("README.rst", encoding="utf-8") as f:
-    readme = re.sub(r"\.\. \|.+\| raw:: html(?:\s{4}.+)+\n\n", "", f.read())
-    readme = re.sub(r"\|header\|", "|logo|\n\n|description|", readme)
+with open("README.md", encoding="utf-8") as f:
+    readme = f.read()
 
 setup(
     name="TgCrypto",
     version="1.1.1",
     description="Fast Telegram Crypto Library for Python",
     long_description=readme,
+    long_description_content_type="text/markdown",
     url="https://github.com/pyrogram",
     download_url="https://github.com/pyrogram/tgcrypto/releases/latest",
-    author="Dan Tès",
+    author="Dan",
     author_email="admin@pyrogram.ml",
     license="LGPLv3+",
     classifiers=[
