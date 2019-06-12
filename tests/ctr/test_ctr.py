@@ -3,10 +3,10 @@ import unittest
 import tgcrypto
 
 
-# https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/AES_CTR.pdf
-
 class TestCTR256(unittest.TestCase):
-    def test_encrypt(self):
+    # https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/AES_CTR.pdf
+
+    def test_ctr256_encrypt(self):
         key = bytes.fromhex("""
         603DEB10 15CA71BE 2B73AEF0 857D7781
         1F352C07 3B6108D7 2D9810A3 0914DFF4
@@ -32,7 +32,7 @@ class TestCTR256(unittest.TestCase):
 
         self.assertEqual(tgcrypto.ctr256_encrypt(plaintext, key, iv, bytes(1)), ciphertext)
 
-    def test_decrypt(self):
+    def test_ctr256_decrypt(self):
         key = bytes.fromhex("""
         603DEB10 15CA71BE 2B73AEF0 857D7781
         1F352C07 3B6108D7 2D9810A3 0914DFF4
@@ -60,7 +60,7 @@ class TestCTR256(unittest.TestCase):
 
     # https://github.com/pyca/cryptography/blob/cd4de3ce6dc2a0dd4171b869e187857e4125853b/vectors/cryptography_vectors/ciphers/AES/CTR/aes-256-ctr.txt
 
-    def test_encrypt_extra1(self):
+    def test_ctr256_encrypt_extra1(self):
         key = bytes.fromhex("776BEFF2851DB06F4C8A0542C8696F6C6A81AF1EEC96B4D37FC1D689E6C1C104")
         iv = bytes.fromhex("00000060DB5672C97AA8F0B200000001")
         plaintext = bytes.fromhex("53696E676C6520626C6F636B206D7367")
@@ -68,7 +68,7 @@ class TestCTR256(unittest.TestCase):
 
         self.assertEqual(tgcrypto.ctr256_encrypt(plaintext, key, iv, bytes(1)), ciphertext)
 
-    def test_encrypt_extra2(self):
+    def test_ctr256_encrypt_extra2(self):
         key = bytes.fromhex("F6D66D6BD52D59BB0796365879EFF886C66DD51A5B6A99744B50590C87A23884")
         iv = bytes.fromhex("00FAAC24C1585EF15A43D87500000001")
         plaintext = bytes.fromhex("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F")
@@ -76,7 +76,7 @@ class TestCTR256(unittest.TestCase):
 
         self.assertEqual(tgcrypto.ctr256_encrypt(plaintext, key, iv, bytes(1)), ciphertext)
 
-    def test_encrypt_extra3(self):
+    def test_ctr256_encrypt_extra3(self):
         key = bytes.fromhex("FF7A617CE69148E4F1726E2F43581DE2AA62D9F805532EDFF1EED687FB54153D")
         iv = bytes.fromhex("001CC5B751A51D70A1C1114800000001")
         plaintext = bytes.fromhex("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F20212223")
