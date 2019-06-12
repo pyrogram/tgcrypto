@@ -97,12 +97,12 @@ static PyObject *cbc256_decrypt(PyObject *self, PyObject *args) {
 }
 
 static PyMethodDef methods[] = {
-    {"ige256_encrypt", (PyCFunction) ige256_encrypt, METH_VARARGS, "AES-IGE 256 bit Encryption"},
-    {"ige256_decrypt", (PyCFunction) ige256_decrypt, METH_VARARGS, "AES-IGE 256 bit Decryption"},
-    {"ctr256_encrypt", (PyCFunction) ctr256_encrypt, METH_VARARGS, "AES-CTR 256 bit Encryption"},
-    {"ctr256_decrypt", (PyCFunction) ctr256_encrypt, METH_VARARGS, "AES-CTR 256 bit Decryption"},
-    {"cbc256_encrypt", (PyCFunction) cbc256_encrypt, METH_VARARGS, "AES-CBC 256 bit Encryption"},
-    {"cbc256_decrypt", (PyCFunction) cbc256_decrypt, METH_VARARGS, "AES-CBC 256 bit Decryption"},
+    {"ige256_encrypt", (PyCFunction) ige256_encrypt, METH_VARARGS, "AES256-IGE Encryption"},
+    {"ige256_decrypt", (PyCFunction) ige256_decrypt, METH_VARARGS, "AES256-IGE Decryption"},
+    {"ctr256_encrypt", (PyCFunction) ctr256_encrypt, METH_VARARGS, "AES256-CTR Encryption"},
+    {"ctr256_decrypt", (PyCFunction) ctr256_encrypt, METH_VARARGS, "AES256-CTR Decryption"},
+    {"cbc256_encrypt", (PyCFunction) cbc256_encrypt, METH_VARARGS, "AES256-CBC Encryption"},
+    {"cbc256_decrypt", (PyCFunction) cbc256_decrypt, METH_VARARGS, "AES256-CBC Decryption"},
     {NULL,             NULL,                         0,            NULL}
 };
 
