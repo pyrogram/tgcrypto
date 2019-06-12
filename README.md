@@ -116,6 +116,15 @@ while True:
 print(data.getvalue() == decrypted_data.getvalue())  # True
 ```
 
+## Testing
+
+1. Install the package: `pip3 install -U tgcrypto`.
+2. Clone this repository: `git clone https://github.com/pyrogram/tgcrypto`.
+3. Enter the directory: `cd tgcrypto`.
+4. Run tests: `python3 -m unittest`.
+
+**Note**: I haven't found any public test vectors for AES-IGE 256 bit, yet.
+
 ## License
 
 [LGPLv3+](COPYING.lesser) © 2017-2019 [Dan](https://github.com/delivrance)
