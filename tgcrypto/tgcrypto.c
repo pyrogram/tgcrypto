@@ -21,8 +21,9 @@
 #include "aes256.h"
 #include "ige256.h"
 #include "ctr256.h"
+#include "cbc256.h"
 
-static PyObject* ige(PyObject *args, uint8_t encrypt) {
+static PyObject *ige(PyObject *args, uint8_t encrypt) {
     Py_buffer data, key, iv;
     uint8_t *buf;
     PyObject *out;
@@ -68,12 +69,41 @@ static PyObject *ctr256_encrypt(PyObject *self, PyObject *args) {
     return out;
 }
 
+static PyObject *cbc(PyObject *args, uint8_t encrypt) {
+    Py_buffer data, key, iv;
+    uint8_t *buf;
+    PyObject *out;
+
+    PyArg_ParseTuple(args, "y*y*y*", &data, &key, &iv);
+
+    buf = cbc256(data.buf, data.len, key.buf, iv.buf, encrypt);
+
+    PyBuffer_Release(&data);
+    PyBuffer_Release(&key);
+    PyBuffer_Release(&iv);
+
+    out = Py_BuildValue("y#", buf, data.len);
+    free(buf);
+
+    return out;
+}
+
+static PyObject *cbc256_encrypt(PyObject *self, PyObject *args) {
+    return cbc(args, 1);
+}
+
+static PyObject *cbc256_decrypt(PyObject *self, PyObject *args) {
+    return cbc(args, 0);
+}
+
 static PyMethodDef methods[] = {
-    {"ige256_encrypt", (PyCFunction) ige256_encrypt, METH_VARARGS, "AES-256-IGE Encryption"},
-    {"ige256_decrypt", (PyCFunction) ige256_decrypt, METH_VARARGS, "AES-256-IGE Decryption"},
-    {"ctr256_encrypt", (PyCFunction) ctr256_encrypt, METH_VARARGS, "AES-256-CTR Encryption"},
-    {"ctr256_decrypt", (PyCFunction) ctr256_encrypt, METH_VARARGS, "AES-256-CTR Decryption"},
-    {NULL, NULL, 0, NULL}
+    {"ige256_encrypt", (PyCFunction) ige256_encrypt, METH_VARARGS, "AES-IGE 256 bit Encryption"},
+    {"ige256_decrypt", (PyCFunction) ige256_decrypt, METH_VARARGS, "AES-IGE 256 bit Decryption"},
+    {"ctr256_encrypt", (PyCFunction) ctr256_encrypt, METH_VARARGS, "AES-CTR 256 bit Encryption"},
+    {"ctr256_decrypt", (PyCFunction) ctr256_encrypt, METH_VARARGS, "AES-CTR 256 bit Decryption"},
+    {"cbc256_encrypt", (PyCFunction) cbc256_encrypt, METH_VARARGS, "AES-CBC 256 bit Encryption"},
+    {"cbc256_decrypt", (PyCFunction) cbc256_decrypt, METH_VARARGS, "AES-CBC 256 bit Decryption"},
+    {NULL,             NULL,                         0,            NULL}
 };
 
 static struct PyModuleDef module = {
