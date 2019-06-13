@@ -20,7 +20,6 @@ import os
 import random
 import re
 import unittest
-from pathlib import Path
 
 import tgcrypto
 
@@ -96,7 +95,11 @@ class TestCBC256Cryptography(unittest.TestCase):
 
     PATTERN = r"COUNT = (\d+)\nKEY = (\w+)\nIV = (\w+)\n(PLAINTEXT|CIPHERTEXT) = (\w+)\n(PLAINTEXT|CIPHERTEXT) = (\w+)"
 
-    for path in (Path(__file__).parent / "vectors").rglob("*.rsp"):
+    BASE_PATH = os.path.dirname(__file__) + "/vectors"
+
+    for path in os.listdir(BASE_PATH):
+        path = BASE_PATH + "/" + path
+
         with open(path, "r", encoding="utf-8") as f:
             for match in re.finditer(PATTERN, f.read()):
                 count, key, iv, plain_or_cipher, bytes1, _, bytes2 = match.groups()
