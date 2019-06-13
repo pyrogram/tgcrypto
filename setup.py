@@ -65,6 +65,7 @@ setup(
     },
     python_requires="~=3.4",
     packages=find_packages(),
+    test_suite="tests",
     zip_safe=False,
     ext_modules=[
         Extension(

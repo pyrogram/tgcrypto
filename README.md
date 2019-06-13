@@ -153,12 +153,9 @@ print(data == cbc_decrypted)  # True
 
 ## Testing
 
-1. Install the package: `pip3 install -U tgcrypto`.
 2. Clone this repository: `git clone https://github.com/pyrogram/tgcrypto`.
 3. Enter the directory: `cd tgcrypto`.
-4. Run tests: `python3 -m unittest`.
-
-**Note**: I haven't found any public test vectors for AES256-IGE, yet.
+4. Run tests: `python3 setup.py test`.
 
 ## License
 
