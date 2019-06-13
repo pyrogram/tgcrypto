@@ -28,7 +28,28 @@ static PyObject *ige(PyObject *args, uint8_t encrypt) {
     uint8_t *buf;
     PyObject *out;
 
-    PyArg_ParseTuple(args, "y*y*y*", &data, &key, &iv);
+    if (!PyArg_ParseTuple(args, "y*y*y*", &data, &key, &iv))
+        return NULL;
+
+    if (data.len == 0) {
+        PyErr_SetString(PyExc_ValueError, "Data must not be empty");
+        return NULL;
+    }
+
+    if (data.len % 16 != 0) {
+        PyErr_SetString(PyExc_ValueError, "Data size must match a multiple of 16 bytes");
+        return NULL;
+    }
+
+    if (key.len != 32) {
+        PyErr_SetString(PyExc_ValueError, "Key size must be exactly 32 bytes");
+        return NULL;
+    }
+
+    if (iv.len != 32) {
+        PyErr_SetString(PyExc_ValueError, "IV size must be exactly 32 bytes");
+        return NULL;
+    }
 
     buf = ige256(data.buf, data.len, key.buf, iv.buf, encrypt);
 
@@ -55,7 +76,33 @@ static PyObject *ctr256_encrypt(PyObject *self, PyObject *args) {
     uint8_t *buf;
     PyObject *out;
 
-    PyArg_ParseTuple(args, "y*y*y*y*", &data, &key, &iv, &state);
+    if (!PyArg_ParseTuple(args, "y*y*y*y*", &data, &key, &iv, &state))
+        return NULL;
+
+    if (data.len == 0) {
+        PyErr_SetString(PyExc_ValueError, "Data must not be empty");
+        return NULL;
+    }
+
+    if (key.len != 32) {
+        PyErr_SetString(PyExc_ValueError, "Key size must be exactly 32 bytes");
+        return NULL;
+    }
+
+    if (iv.len != 16) {
+        PyErr_SetString(PyExc_ValueError, "IV size must be exactly 16 bytes");
+        return NULL;
+    }
+
+    if (state.len != 1) {
+        PyErr_SetString(PyExc_ValueError, "State size must be exactly 1 byte");
+        return NULL;
+    }
+
+    if (*(uint8_t *) state.buf > 15) {
+        PyErr_SetString(PyExc_ValueError, "State value must be in the range [0, 15]");
+        return NULL;
+    }
 
     buf = ctr256(data.buf, data.len, key.buf, iv.buf, state.buf);
 
@@ -74,7 +121,28 @@ static PyObject *cbc(PyObject *args, uint8_t encrypt) {
     uint8_t *buf;
     PyObject *out;
 
-    PyArg_ParseTuple(args, "y*y*y*", &data, &key, &iv);
+    if (!PyArg_ParseTuple(args, "y*y*y*", &data, &key, &iv))
+        return NULL;
+
+    if (data.len == 0) {
+        PyErr_SetString(PyExc_ValueError, "Data must not be empty");
+        return NULL;
+    }
+
+    if (data.len % 16 != 0) {
+        PyErr_SetString(PyExc_ValueError, "Data size must match a multiple of 16 bytes");
+        return NULL;
+    }
+
+    if (key.len != 32) {
+        PyErr_SetString(PyExc_ValueError, "Key size must be exactly 32 bytes");
+        return NULL;
+    }
+
+    if (iv.len != 16) {
+        PyErr_SetString(PyExc_ValueError, "IV size must be exactly 16 bytes");
+        return NULL;
+    }
 
     buf = cbc256(data.buf, data.len, key.buf, iv.buf, encrypt);
 
