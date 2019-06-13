@@ -153,9 +153,9 @@ print(data == cbc_decrypted)  # True
 
 ## Testing
 
-2. Clone this repository: `git clone https://github.com/pyrogram/tgcrypto`.
-3. Enter the directory: `cd tgcrypto`.
-4. Run tests: `python3 setup.py test`.
+1. Clone this repository: `git clone https://github.com/pyrogram/tgcrypto`.
+2. Enter the directory: `cd tgcrypto`.
+3. Run tests: `python3 setup.py test`.
 
 ## License
 
