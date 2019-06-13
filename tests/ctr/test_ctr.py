@@ -1,9 +1,29 @@
+# Pyrogram - Telegram MTProto API Client Library for Python
+# Copyright (C) 2017-2019 Dan <https://github.com/delivrance>
+#
+# This file is part of Pyrogram.
+#
+# Pyrogram is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Pyrogram is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
+
+import os
+import random
 import unittest
 
 import tgcrypto
 
 
-class TestCTR256(unittest.TestCase):
+class TestCTR256NIST(unittest.TestCase):
     # https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/AES_CTR.pdf
 
     def test_ctr256_encrypt(self):
@@ -58,6 +78,8 @@ class TestCTR256(unittest.TestCase):
 
         self.assertEqual(tgcrypto.ctr256_decrypt(ciphertext, key, iv, bytes(1)), plaintext)
 
+
+class TestCTR256Cryptography(unittest.TestCase):
     # https://github.com/pyca/cryptography/blob/cd4de3ce6dc2a0dd4171b869e187857e4125853b/vectors/cryptography_vectors/ciphers/AES/CTR/aes-256-ctr.txt
 
     def test_ctr256_encrypt_extra1(self):
@@ -83,6 +105,113 @@ class TestCTR256(unittest.TestCase):
         ciphertext = bytes.fromhex("EB6C52821D0BBBF7CE7594462ACA4FAAB407DF866569FD07F48CC0B583D6071F1EC0E6B8")
 
         self.assertEqual(tgcrypto.ctr256_encrypt(plaintext, key, iv, bytes(1)), ciphertext)
+
+
+class TestCTR256Input(unittest.TestCase):
+    def test_ctr256_encrypt_invalid_args_count(self):
+        with self.assertRaisesRegex(TypeError, r"function takes exactly \d arguments \(\d given\)"):
+            tgcrypto.ctr256_encrypt(os.urandom(8), os.urandom(32), os.urandom(16))
+
+    def test_ctr256_encrypt_invalid_args_type(self):
+        with self.assertRaisesRegex(TypeError, r"a bytes-like object is required, not '\w+'"):
+            tgcrypto.ctr256_encrypt(1, 2, 3, 4)
+
+    def test_ctr256_encrypt_empty_data(self):
+        with self.assertRaisesRegex(ValueError, r"Data must not be empty"):
+            tgcrypto.ctr256_encrypt(b"", os.urandom(32), os.urandom(16), bytes(1))
+
+    def test_ctr256_encrypt_invalid_key_size(self):
+        with self.assertRaisesRegex(ValueError, r"Key size must be exactly 32 bytes"):
+            tgcrypto.ctr256_encrypt(os.urandom(8), os.urandom(31), os.urandom(16), bytes(1))
+
+    def test_ctr256_encrypt_invalid_iv_size(self):
+        with self.assertRaisesRegex(ValueError, r"IV size must be exactly 16 bytes"):
+            tgcrypto.ctr256_encrypt(os.urandom(8), os.urandom(32), os.urandom(15), bytes(1))
+
+    def test_ctr256_encrypt_invalid_state_size(self):
+        with self.assertRaisesRegex(ValueError, r"State size must be exactly 1 byte"):
+            tgcrypto.ctr256_encrypt(os.urandom(8), os.urandom(32), os.urandom(16), bytes([1, 2, 3]))
+
+    def test_ctr256_encrypt_invalid_state_value(self):
+        with self.assertRaisesRegex(ValueError, r"State value must be in the range \[0, 15\]"):
+            tgcrypto.ctr256_encrypt(os.urandom(8), os.urandom(32), os.urandom(16), bytes([16]))
+
+    def test_ctr256_decrypt_invalid_args_count(self):
+        with self.assertRaisesRegex(TypeError, r"function takes exactly \d arguments \(\d given\)"):
+            tgcrypto.ctr256_decrypt(os.urandom(8), os.urandom(32), os.urandom(16))
+
+    def test_ctr256_decrypt_invalid_args_type(self):
+        with self.assertRaisesRegex(TypeError, r"a bytes-like object is required, not '\w+'"):
+            tgcrypto.ctr256_decrypt(1, 2, 3, 4)
+
+    def test_ctr256_decrypt_empty_data(self):
+        with self.assertRaisesRegex(ValueError, r"Data must not be empty"):
+            tgcrypto.ctr256_decrypt(b"", os.urandom(32), os.urandom(16), bytes(1))
+
+    def test_ctr256_decrypt_invalid_key_size(self):
+        with self.assertRaisesRegex(ValueError, r"Key size must be exactly 32 bytes"):
+            tgcrypto.ctr256_decrypt(os.urandom(8), os.urandom(31), os.urandom(16), bytes(1))
+
+    def test_ctr256_decrypt_invalid_iv_size(self):
+        with self.assertRaisesRegex(ValueError, r"IV size must be exactly 16 bytes"):
+            tgcrypto.ctr256_decrypt(os.urandom(8), os.urandom(32), os.urandom(15), bytes(1))
+
+    def test_ctr256_decrypt_invalid_state_size(self):
+        with self.assertRaisesRegex(ValueError, r"State size must be exactly 1 byte"):
+            tgcrypto.ctr256_decrypt(os.urandom(8), os.urandom(32), os.urandom(16), bytes([1, 2, 3]))
+
+    def test_ctr256_decrypt_invalid_state_value(self):
+        with self.assertRaisesRegex(ValueError, r"State value must be in the range \[0, 15\]"):
+            tgcrypto.ctr256_decrypt(os.urandom(8), os.urandom(32), os.urandom(16), bytes([16]))
+
+
+class TestCTR256Random(unittest.TestCase):
+    DATA_MAX_SIZE = 1024
+    KEY_SIZE = 32
+    IV_SIZE = 16
+
+    TESTS_AMOUNT = 500
+
+    TEMPLATE = """
+    def test_ctr256_random_{mode1}_{count}(self):
+        data = {data}
+        key = {key}
+        iv = {iv}
+        iv_copy = iv.copy()
+        state = {state}
+        state_copy = state.copy()
+
+        a = tgcrypto.ctr256_{mode1}(data, key, iv, state)
+        b = tgcrypto.ctr256_{mode2}(a, key, iv_copy, state_copy)
+
+        self.assertEqual(data, b)
+    """.replace("\n    ", "\n")
+
+    for count in range(TESTS_AMOUNT):
+        exec(
+            TEMPLATE.format(
+                mode1="encrypt",
+                mode2="decrypt",
+                count=count,
+                data=os.urandom(random.randint(1, DATA_MAX_SIZE)),
+                key=os.urandom(KEY_SIZE),
+                iv=bytearray(os.urandom(IV_SIZE)),
+                state=bytearray([random.randint(0, 15)])
+            )
+        )
+
+    for count in range(TESTS_AMOUNT):
+        exec(
+            TEMPLATE.format(
+                mode1="decrypt",
+                mode2="encrypt",
+                count=count,
+                data=os.urandom(random.randint(1, DATA_MAX_SIZE)),
+                key=os.urandom(KEY_SIZE),
+                iv=bytearray(os.urandom(IV_SIZE)),
+                state=bytearray([random.randint(0, 15)])
+            )
+        )
 
 
 if __name__ == "__main__":
