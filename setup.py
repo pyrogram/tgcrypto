@@ -44,6 +44,7 @@ setup(
         "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: Implementation",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
@@ -64,6 +65,7 @@ setup(
     },
     python_requires="~=3.4",
     packages=find_packages(),
+    test_suite="tests",
     zip_safe=False,
     ext_modules=[
         Extension(
@@ -72,7 +74,8 @@ setup(
                 "tgcrypto/tgcrypto.c",
                 "tgcrypto/aes256.c",
                 "tgcrypto/ige256.c",
-                "tgcrypto/ctr256.c"
+                "tgcrypto/ctr256.c",
+                "tgcrypto/cbc256.c"
             ]
         )
     ]
