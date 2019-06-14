@@ -5,12 +5,13 @@ environment:
 
 install:
   - set PATH=C:\Python37;%PATH%
-  - cmd: python -m pip install cibuildwheel
+  - set BUILD_OUTPUT_PATH=windows-tgcrypto-wheels
+  - cmd: pip install -r requirements-ci.txt
 
 build_script:
-  - cmd: python -m cibuildwheel --output-dir windows-tgcrypto-wheels
-  - ps: Compress-Archive windows-tgcrypto-wheels/* windows-tgcrypto-wheels.zip
+  - cmd: cibuildwheel --output-dir %BUILD_OUTPUT_PATH%
+  - ps: Compress-Archive "$env:BUILD_OUTPUT_PATH/*" "$env:BUILD_OUTPUT_PATH.zip"
 
 artifacts:
-  - path: "windows-tgcrypto-wheels.zip"
+  - path: "$(BUILD_OUTPUT_PATH).zip"
     name: wheels

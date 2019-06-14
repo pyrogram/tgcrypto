@@ -16,7 +16,7 @@ matrix:
     - sudo: required
       services: docker
 
-install: pip3 install cibuildwheel
+install: pip3 install -r requirements-ci.txt
 
 script:
   - cibuildwheel --output-dir $BUILD_OUTPUT_PATH
