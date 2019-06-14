@@ -51,7 +51,9 @@ static PyObject *ige(PyObject *args, uint8_t encrypt) {
         return NULL;
     }
 
+    Py_BEGIN_ALLOW_THREADS
     buf = ige256(data.buf, data.len, key.buf, iv.buf, encrypt);
+    Py_END_ALLOW_THREADS
 
     PyBuffer_Release(&data);
     PyBuffer_Release(&key);
@@ -104,7 +106,9 @@ static PyObject *ctr256_encrypt(PyObject *self, PyObject *args) {
         return NULL;
     }
 
+    Py_BEGIN_ALLOW_THREADS
     buf = ctr256(data.buf, data.len, key.buf, iv.buf, state.buf);
+    Py_END_ALLOW_THREADS
 
     PyBuffer_Release(&data);
     PyBuffer_Release(&key);
@@ -144,7 +148,9 @@ static PyObject *cbc(PyObject *args, uint8_t encrypt) {
         return NULL;
     }
 
+    Py_BEGIN_ALLOW_THREADS
     buf = cbc256(data.buf, data.len, key.buf, iv.buf, encrypt);
+    Py_END_ALLOW_THREADS
 
     PyBuffer_Release(&data);
     PyBuffer_Release(&key);
