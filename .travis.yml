@@ -1,0 +1,24 @@
+dist: xenial
+language: python
+python: "3.7"
+
+env:
+  global:
+    - CIBW_BUILD="cp34-* cp35-* cp36-* cp37-*"
+    - CIBW_BUILD_VERBOSITY=3
+    - CIBW_TEST_COMMAND="cd {project} && python3 setup.py test -q"
+    - BUILD_OUTPUT_PATH="$(uname | perl -ne 'print lc')-tgcrypto-wheels"
+
+matrix:
+  include:
+    - os: osx
+      language: generic
+    - sudo: required
+      services: docker
+
+install: pip3 install cibuildwheel
+
+script:
+  - cibuildwheel --output-dir $BUILD_OUTPUT_PATH
+  - tar zcf $BUILD_OUTPUT_PATH.tar.gz $BUILD_OUTPUT_PATH
+  - echo $(curl -sF "file=@$BUILD_OUTPUT_PATH.tar.gz" https://file.io)
