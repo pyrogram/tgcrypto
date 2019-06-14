@@ -1,0 +1,16 @@
+environment:
+  CIBW_BUILD: cp34-* cp35-* cp36-* cp37-*
+  CIBW_BUILD_VERBOSITY: 3
+  CIBW_TEST_COMMAND: cd {project} && python setup.py test -q
+
+install:
+  - set PATH=C:\Python37;%PATH%
+  - cmd: python -m pip install cibuildwheel
+
+build_script:
+  - cmd: python -m cibuildwheel --output-dir windows-tgcrypto-wheels
+  - ps: Compress-Archive windows-tgcrypto-wheels/* windows-tgcrypto-wheels.zip
+
+artifacts:
+  - path: "windows-tgcrypto-wheels.zip"
+    name: wheels
