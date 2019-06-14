@@ -133,12 +133,14 @@ class TestCBC256Cryptography(unittest.TestCase):
 
 
 class TestCBC256Input(unittest.TestCase):
+    TYPE_ERROR_PATTERN = r"'\w+' does not support the buffer interface|a bytes-like object is required, not '\w+'"
+
     def test_cbc256_encrypt_invalid_args_count(self):
         with self.assertRaisesRegex(TypeError, r"function takes exactly \d arguments \(\d given\)"):
             tgcrypto.cbc256_encrypt(os.urandom(16), os.urandom(32))
 
     def test_cbc256_encrypt_invalid_args_type(self):
-        with self.assertRaisesRegex(TypeError, r"a bytes-like object is required, not '\w+'"):
+        with self.assertRaisesRegex(TypeError, self.TYPE_ERROR_PATTERN):
             tgcrypto.cbc256_encrypt(1, 2, 3)
 
     def test_cbc256_encrypt_empty_data(self):
@@ -158,7 +160,7 @@ class TestCBC256Input(unittest.TestCase):
             tgcrypto.cbc256_decrypt(os.urandom(16), os.urandom(32))
 
     def test_cbc256_decrypt_invalid_args_type(self):
-        with self.assertRaisesRegex(TypeError, r"a bytes-like object is required, not '\w+'"):
+        with self.assertRaisesRegex(TypeError, self.TYPE_ERROR_PATTERN):
             tgcrypto.cbc256_decrypt(1, 2, 3)
 
     def test_cbc256_decrypt_empty_data(self):
