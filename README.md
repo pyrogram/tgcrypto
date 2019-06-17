@@ -2,15 +2,28 @@
 
 <img src="https://i.imgur.com/JyxrStE.png" width="160" align="right">
 
-> Fast Telegram Crypto Library for Python
+> Fast and Portable Telegram Crypto Library for Python
 
-**TgCrypto** is a high-performance, easy-to-install Telegram Crypto Library written in C as a Python extension.
-TgCrypto is intended for [Pyrogram](//github.com/pyrogram/pyrogram) and implements the crypto algorithms Telegram
-requires, namely:
+**TgCrypto** is a Telegram Crypto Library written in C89 as a Python extension. It is designed to be portable, fast, easy
+to install and use. TgCrypto is intended for [Pyrogram](https://github.com/pyrogram/pyrogram) and implements the crypto
+algorithms Telegram requires, namely:
 
-- **AES256-IGE** - used in [MTProto v2.0](https://core.telegram.org/mtproto).
-- **AES256-CTR** - used for [CDN encrypted files](https://core.telegram.org/cdn).
-- **AES256-CBC** - used for [encrypted passport credentials](https://core.telegram.org/passport).
+- **`AES256-IGE`** - used in [MTProto v2.0](https://core.telegram.org/mtproto).
+- **`AES256-CTR`** - used for [CDN encrypted files](https://core.telegram.org/cdn).
+- **`AES256-CBC`** - used for [encrypted passport credentials](https://core.telegram.org/passport).
+
+Python [wheels are available](https://pypi.org/project/TgCrypto/#files) for hassle-free installations; they are
+automatically built and tested using Travis CI (Linux, macOS) and AppVeyor (Windows), for both 32-bit and 64-bit
+architectures.
+
+Even though TgCrypto is primarily intended for use with Pyrogram, you are free and welcome to use it for any other
+Python project too, as it's shipped as standalone package.
+
+More info: https://docs.pyrogram.org/topics/tgcrypto
+
+## Requirements
+
+- Python 3.4 or higher.
 
 ## Installation
 
@@ -18,24 +31,19 @@ requires, namely:
 $ pip3 install -U tgcrypto
 ```
 
-More info: https://docs.pyrogram.org/topics/tgcrypto
-
 ## API
 
 TgCrypto API consists of these six methods:
 
 ```python
-def ige256_encrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
+def ige256_encrypt(data: bytes, key: bytes, iv: bytes) -> bytes: ...
+def ige256_decrypt(data: bytes, key: bytes, iv: bytes) -> bytes: ...
 
-def ige256_decrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
+def ctr256_encrypt(data: bytes, key: bytes, iv: bytes, state: bytes) -> bytes: ...
+def ctr256_decrypt(data: bytes, key: bytes, iv: bytes, state: bytes) -> bytes: ...
 
-def ctr256_encrypt(data: bytes, key: bytes, iv: bytes, state: bytes) -> bytes:
-
-def ctr256_decrypt(data: bytes, key: bytes, iv: bytes, state: bytes) -> bytes:
-
-def cbc256_encrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
-
-def cbc256_decrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
+def cbc256_encrypt(data: bytes, key: bytes, iv: bytes) -> bytes: ...
+def cbc256_decrypt(data: bytes, key: bytes, iv: bytes) -> bytes: ...
 ```
 
 ## Usage
