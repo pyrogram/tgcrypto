@@ -1,5 +1,5 @@
 environment:
-  CIBW_BUILD: cp34-* cp35-* cp36-* cp37-*
+  CIBW_BUILD: cp34-* cp35-* cp36-* cp37-* cp38-*
   CIBW_BUILD_VERBOSITY: 3
   CIBW_TEST_COMMAND: cd {project} && python setup.py test -q
 
