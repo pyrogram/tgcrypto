@@ -28,9 +28,9 @@
 #define AES_BLOCK_SIZE 16
 #define EXPANDED_KEY_SIZE 60
 
-#define LROTL(x) (((x) << 8) | ((x) >> 24))
-#define LROTR(x) ((x) >> 8) | ((x) << 24))
-#define SWAP(x) ((LROTL((x)) & 0x00ff00ff) | ((LROTR((x)) & 0xff00ff00))
+#define LROTL(x) ((x) << 8 | (x) >> 24)
+#define LROTR(x) ((x) >> 8 | (x) << 24)
+#define SWAP(x) (LROTL((x)) & 0x00ff00ff | LROTR((x)) & 0xff00ff00)
 #define GET(p) SWAP(*((uint32_t *)(p)))
 #define PUT(ct, st) {*((uint32_t *)(ct)) = SWAP((st));}
 
