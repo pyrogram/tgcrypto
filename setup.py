@@ -64,7 +64,7 @@ setup(
         "Source": "https://github.com/pyrogram/tgcrypto",
         "Documentation": "https://docs.pyrogram.org",
     },
-    python_requires="~=3.4",
+    python_requires="~=3.6",
     packages=find_packages(),
     test_suite="tests",
     zip_safe=False,

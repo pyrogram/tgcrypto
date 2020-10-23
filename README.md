@@ -23,7 +23,7 @@ More info: https://docs.pyrogram.org/topics/tgcrypto
 
 ## Requirements
 
-- Python 3.4 or higher.
+- Python 3.6 or higher.
 
 ## Installation
 
