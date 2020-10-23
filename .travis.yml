@@ -28,7 +28,7 @@ env:
   global:
     - CIBW_BUILD="cp36-* cp37-* cp38-* cp39-* pp36-* pp37-*"
     - CIBW_BUILD_VERBOSITY=3
-    - CIBW_TEST_COMMAND="cd {project} && pyhton3 -m tox"
+    - CIBW_TEST_COMMAND="cd {project} && python3 -m tox"
     - BUILD_OUTPUT_PATH="$(uname | perl -ne 'print lc')-tgcrypto-wheels"
 
 install:
