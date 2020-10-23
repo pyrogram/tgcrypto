@@ -22,7 +22,7 @@ jobs:
         - choco install python --version 3.8.0
         - export PATH="/c/Python38:/c/Python38/Scripts:$PATH"
         # Make sure Python is on PATH as "python3"
-        # - ln -s /c/Python38/python.exe /c/Python38/python3.exe
+        - ln -s /c/Python38/python.exe /c/Python38/python3.exe
 
 env:
   global:
@@ -33,7 +33,7 @@ env:
     - BUILD_OUTPUT_PATH="$(uname | perl -ne 'print lc')-tgcrypto-wheels"
 
 install:
-  - pip install cibuildwheel==1.6.3
+  - python3 -m pip install cibuildwheel==1.6.3
   
 script:
   - cibuildwheel --output-dir $BUILD_OUTPUT_PATH
