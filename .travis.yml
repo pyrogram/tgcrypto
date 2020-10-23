@@ -5,6 +5,10 @@ jobs:
     # perform a linux build
     - services: docker
     
+    # perform a linux ARMv8 build
+    - services: docker
+      arch: arm64
+    
     # and a mac build
     - os: osx
       # PyPy 7.3.2 needs macOS >= 10.14
