@@ -33,7 +33,7 @@ env:
 
 install:
   - python3 -m pip install -U pip
-  - python3 -m pip install cibuildwheel==1.6.3 tox
+  - python3 -m pip install cibuildwheel==1.6.3 tox-travis
   
 script:
   - cibuildwheel --output-dir $BUILD_OUTPUT_PATH
