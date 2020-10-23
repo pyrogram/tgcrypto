@@ -13,8 +13,8 @@ algorithms Telegram requires, namely:
 - **`AES256-CBC`** - used for [encrypted passport credentials](https://core.telegram.org/passport).
 
 Python [wheels are available](https://pypi.org/project/TgCrypto/#files) for hassle-free installations; they are
-automatically built and tested using Travis CI (Linux, macOS) and AppVeyor (Windows), for both 32-bit and 64-bit
-architectures.
+automatically built and tested using Travis CI for Linux (i686, x86_64, AArch64), Windows (32-bit, 64-bit) and macOS
+(x86_64).
 
 Even though TgCrypto is primarily intended for use with Pyrogram, you are free and welcome to use it for any other
 Python project too, as it's shipped as standalone package.
