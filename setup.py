@@ -23,7 +23,7 @@ with open("README.md", encoding="utf-8") as f:
 
 setup(
     name="TgCrypto",
-    version="1.2.1",
+    version="1.2.2",
     description="Fast Telegram Crypto Library for Python",
     long_description=readme,
     long_description_content_type="text/markdown",
