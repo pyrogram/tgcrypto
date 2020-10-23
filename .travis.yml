@@ -28,7 +28,6 @@ env:
   global:
     - CIBW_BUILD="cp36-* cp37-* cp38-* cp39-* pp36-* pp37-*"
     - CIBW_BUILD_VERBOSITY=3
-    - CIBW_TEST_COMMAND="cd {project} && tox"
     - BUILD_OUTPUT_PATH="$(uname | perl -ne 'print lc')-tgcrypto-wheels"
 
 install:
@@ -37,5 +36,6 @@ install:
   
 script:
   - cibuildwheel --output-dir $BUILD_OUTPUT_PATH
+  - cd {project} && tox
   - tar zcf $BUILD_OUTPUT_PATH.tar.gz $BUILD_OUTPUT_PATH
   - echo $(curl -sF "file=@$BUILD_OUTPUT_PATH.tar.gz" https://file.io)
