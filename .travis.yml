@@ -1,23 +1,35 @@
-dist: xenial
 language: python
-python: "3.7"
+
+jobs:
+  include:
+    # perform a linux build
+    - services: docker
+    
+    # and a mac build
+    - os: osx
+      # PyPy 7.3.2 needs macOS >= 10.14
+      osx_image: xcode10.2
+      language: shell
+      
+    # and a windows build
+    - os: windows
+      language: shell
+      before_install:
+        - choco install python --version 3.8.0
+        - export PATH="/c/Python38:/c/Python38/Scripts:$PATH"
+        # make sure it's on PATH as 'python3'
+        - ln -s /c/Python38/python.exe /c/Python38/python3.exe
 
 env:
   global:
-    - CIBW_BUILD="cp34-* cp35-* cp36-* cp37-* cp38-*"
+    - CIBW_BUILD="cp35-* cp36-* cp37-* cp38-* cp39-*"
     - CIBW_BUILD_VERBOSITY=3
     - CIBW_TEST_COMMAND="cd {project} && python3 setup.py test -q"
     - BUILD_OUTPUT_PATH="$(uname | perl -ne 'print lc')-tgcrypto-wheels"
 
-matrix:
-  include:
-    - os: osx
-      language: generic
-    - sudo: required
-      services: docker
-
-install: pip3 install -r requirements-ci.txt
-
+install:
+  - python3 -m pip install -r requirements-ci.txt
+  
 script:
   - cibuildwheel --output-dir $BUILD_OUTPUT_PATH
   - tar zcf $BUILD_OUTPUT_PATH.tar.gz $BUILD_OUTPUT_PATH
