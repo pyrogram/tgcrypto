@@ -2,37 +2,37 @@ language: python
 
 jobs:
   include:
-    # perform a linux build
+    # Perform a Linux i686 and x86_64 build
     - services: docker
     
-    # perform a linux ARMv8 build
+    # Perform a Linux AArch64 build
     - services: docker
       arch: arm64
     
-    # and a mac build
+    # Perform a macOS x86_64 build
     - os: osx
       # PyPy 7.3.2 needs macOS >= 10.14
       osx_image: xcode10.2
       language: shell
       
-    # and a windows build
+    # Perform a Windows 32-bit and 64-bit build
     - os: windows
       language: shell
       before_install:
         - choco install python --version 3.8.0
         - export PATH="/c/Python38:/c/Python38/Scripts:$PATH"
-        # make sure it's on PATH as 'python3'
+        # Make sure Python is on PATH as "python3"
         - ln -s /c/Python38/python.exe /c/Python38/python3.exe
 
 env:
   global:
-    - CIBW_BUILD="cp35-* cp36-* cp37-* cp38-* cp39-*"
+    - CIBW_BUILD="cp35-* cp36-* cp37-* cp38-* cp39-* pp36-* pp37-*"
     - CIBW_BUILD_VERBOSITY=3
-    - CIBW_TEST_COMMAND="cd {project} && python3 setup.py test -q"
+    - CIBW_TEST_COMMAND="cd {project} && tox"
     - BUILD_OUTPUT_PATH="$(uname | perl -ne 'print lc')-tgcrypto-wheels"
 
 install:
-  - python3 -m pip install -r requirements-ci.txt
+  - python3 -m pip install cibuildtool==1.6.3 tox
   
 script:
   - cibuildwheel --output-dir $BUILD_OUTPUT_PATH
