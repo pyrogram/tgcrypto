@@ -32,7 +32,7 @@
 #define LROTR(x) (((x) >> 8) | ((x) << 24))
 #define SWAP(x) ((LROTL((x)) & 0x00ff00ff) | (LROTR((x)) & 0xff00ff00))
 #define GET(p) SWAP(*((uint32_t *)(p)))
-#define PUT(ct, st) {*((uint32_t *)(ct)) = SWAP((st));}
+#define PUT(ct, st) {*((uint32_t *)(ct)) = SWAP((st));} (void)0
 
 void aes256_set_encryption_key(const uint8_t key[32], uint32_t expandedKey[60]);
 
