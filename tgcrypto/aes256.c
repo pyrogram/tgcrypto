@@ -20,6 +20,12 @@
 
 #include "aes256.h"
 
+#define LROTL(x) (((x) << 8) | ((x) >> 24))
+#define LROTR(x) (((x) >> 8) | ((x) << 24))
+#define SWAP(x) ((LROTL((x)) & 0x00ff00ff) | (LROTR((x)) & 0xff00ff00))
+#define GET(p) SWAP(*((uint32_t *)(p)))
+#define PUT(ct, st) (*((uint32_t *)(ct)) = SWAP((st)))
+
 static const uint32_t Te0[256] = {
     0xc66363a5, 0xf87c7c84, 0xee777799, 0xf67b7b8d, 0xfff2f20d, 0xd66b6bbd, 0xde6f6fb1, 0x91c5c554,
     0x60303050, 0x02010103, 0xce6767a9, 0x562b2b7d, 0xe7fefe19, 0xb5d7d762, 0x4dababe6, 0xec76769a,
