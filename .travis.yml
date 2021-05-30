@@ -33,7 +33,7 @@ env:
     - BUILD_OUTPUT_PATH="$(uname | perl -ne 'print lc')-tgcrypto-wheels"
 
 install:
-  - python3 -m pip install cibuildwheel==1.6.4
+  - python3 -m pip install cibuildwheel
   
 script:
   - cibuildwheel --output-dir $BUILD_OUTPUT_PATH
