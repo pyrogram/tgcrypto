@@ -17,7 +17,8 @@ jobs:
         uses: pypa/cibuildwheel@v2.2.0a1
         env:
           CIBW_TEST_REQUIRES: tox
-          CIBW_TEST_COMMAND: cd {package} && tox
+          CIBW_TEST_COMMAND: cd {project} && tox
+          CIBW_TEST_COMMAND_WINDOWS: cd {project} && cd .. && tox
           CIBW_BUILD_VERBOSITY: 1
 
       - name: Store wheels
