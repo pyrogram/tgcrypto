@@ -133,7 +133,7 @@ class TestCBC256Cryptography(unittest.TestCase):
 
 
 class TestCBC256Input(unittest.TestCase):
-    TYPE_ERROR_PATTERN = r"'\w+' does not support the buffer interface|a bytes-like object is required, not '\w+'"
+    TYPE_ERROR_PATTERN = r"'\w+' does not (support|have) the buffer interface|a bytes-like object is required, not '\w+'"
 
     def test_cbc256_encrypt_invalid_args_count(self):
         with self.assertRaisesRegex(TypeError, r"function takes exactly \d arguments \(\d given\)"):
