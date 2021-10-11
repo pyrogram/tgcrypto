@@ -24,7 +24,7 @@ with open("README.md", encoding="utf-8") as f:
 setup(
     name="TgCrypto",
     version="1.2.2",
-    description="Fast Telegram Crypto Library for Python",
+    description="Fast and Portable Cryptography Extension Library for Pyrogram",
     long_description=readme,
     long_description_content_type="text/markdown",
     url="https://github.com/pyrogram",
@@ -40,12 +40,11 @@ setup(
         "Programming Language :: C",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.3",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: Implementation",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
@@ -57,7 +56,7 @@ setup(
         "Topic :: Software Development :: Libraries",
         "Topic :: Software Development :: Libraries :: Python Modules"
     ],
-    keywords="fast pyrogram telegram crypto mtproto api client library python",
+    keywords="pyrogram telegram crypto cryptography encryption mtproto extension library aes",
     project_urls={
         "Tracker": "https://github.com/pyrogram/tgcrypto/issues",
         "Community": "https://t.me/pyrogram",
