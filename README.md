@@ -2,24 +2,15 @@
 
 <img src="https://i.imgur.com/JyxrStE.png" width="160" align="right">
 
-> Fast and Portable Telegram Crypto Library for Python
+> Fast and Portable Cryptography Extension Library for Pyrogram
 
-**TgCrypto** is a Telegram Crypto Library written in C89 as a Python extension. It is designed to be portable, fast, easy
-to install and use. TgCrypto is intended for [Pyrogram](https://github.com/pyrogram/pyrogram) and implements the crypto
-algorithms Telegram requires, namely:
+**TgCrypto** is a Cryptography Library written in C as a Python extension. It is designed to be portable, fast,
+easy to install and use. TgCrypto is intended for [Pyrogram](https://github.com/pyrogram/pyrogram) and implements the
+cryptographic algorithms Telegram requires, namely:
 
-- **`AES256-IGE`** - used in [MTProto v2.0](https://core.telegram.org/mtproto).
-- **`AES256-CTR`** - used for [CDN encrypted files](https://core.telegram.org/cdn).
-- **`AES256-CBC`** - used for [encrypted passport credentials](https://core.telegram.org/passport).
-
-Python [wheels are available](https://pypi.org/project/TgCrypto/#files) for hassle-free installations; they are
-automatically built and tested using Travis CI for Linux (i686, x86_64, AArch64), Windows (32-bit, 64-bit) and macOS
-(x86_64).
-
-Even though TgCrypto is primarily intended for use with Pyrogram, you are free and welcome to use it for any other
-Python project too, as it's shipped as standalone package.
-
-More info: https://docs.pyrogram.org/topics/tgcrypto
+- **`AES-256-IGE`** - used in [MTProto v2.0](https://core.telegram.org/mtproto).
+- **`AES-256-CTR`** - used for [CDN encrypted files](https://core.telegram.org/cdn).
+- **`AES-256-CBC`** - used for [encrypted passport credentials](https://core.telegram.org/passport).
 
 ## Requirements
 
@@ -163,7 +154,8 @@ print(data == cbc_decrypted)  # True
 
 1. Clone this repository: `git clone https://github.com/pyrogram/tgcrypto`.
 2. Enter the directory: `cd tgcrypto`.
-3. Run tests: `python3 setup.py test`.
+3. Install `tox`: `pip3 install tox`
+4. Run tests: `tox`.
 
 ## License
 
