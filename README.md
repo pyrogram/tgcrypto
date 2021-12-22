@@ -1,7 +1,5 @@
 # TgCrypto
 
-<img src="https://i.imgur.com/JyxrStE.png" width="160" align="right">
-
 > Fast and Portable Cryptography Extension Library for Pyrogram
 
 **TgCrypto** is a Cryptography Library written in C as a Python extension. It is designed to be portable, fast,
