@@ -157,4 +157,4 @@ print(data == cbc_decrypted)  # True
 
 ## License
 
-[LGPLv3+](COPYING.lesser) © 2017-2020 [Dan](https://github.com/delivrance)
+[LGPLv3+](COPYING.lesser) © 2017-present [Dan](https://github.com/delivrance)
