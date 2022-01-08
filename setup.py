@@ -23,7 +23,7 @@ with open("README.md", encoding="utf-8") as f:
 
 setup(
     name="TgCrypto",
-    version="1.2.2",
+    version="1.2.3",
     description="Fast and Portable Cryptography Extension Library for Pyrogram",
     long_description=readme,
     long_description_content_type="text/markdown",
