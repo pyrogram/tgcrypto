@@ -23,7 +23,7 @@ with open("README.md", encoding="utf-8") as f:
 
 setup(
     name="TgCrypto",
-    version="1.2.3",
+    version="1.2.4",
     description="Fast and Portable Cryptography Extension Library for Pyrogram",
     long_description=readme,
     long_description_content_type="text/markdown",
@@ -40,7 +40,6 @@ setup(
         "Programming Language :: C",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
@@ -63,7 +62,7 @@ setup(
         "Source": "https://github.com/pyrogram/tgcrypto",
         "Documentation": "https://docs.pyrogram.org",
     },
-    python_requires="~=3.6",
+    python_requires="~=3.7",
     packages=find_packages(),
     test_suite="tests",
     zip_safe=False,
