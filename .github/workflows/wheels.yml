@@ -1,33 +1,25 @@
-name: Build and publish wheels
+name: Build wheels
 
-on:
-  release:
-    types: [push]
+on: [push]
 
 jobs:
-
   build_wheels:
-    name: Build wheels
+    name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['3.9', '3.10', '3.11', '3.12']
+        os: [ubuntu-latest, windows-latest, macos-13, macos-latest]
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
+      - uses: actions/setup-python@v5
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip setuptools wheel
+      - name: Install cibuildwheel
+        run: python -m pip install cibuildwheel==2.21.3
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.17.0
+        run: python -m cibuildwheel --output-dir wheelhouse
         env:
           CIBW_ARCHS_MACOS: "x86_64 universal2 arm64"
           CIBW_TEST_REQUIRES: tox
@@ -35,36 +27,7 @@ jobs:
           CIBW_TEST_SKIP: "*-win*"
           CIBW_BUILD_VERBOSITY: 1
 
-      - name: Store wheels
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
-          name: dist-${{ matrix.os }}-${{ matrix.python-version }}
+          name: cibw-wheels-${{ matrix.os }}-${{ strategy.job-index }}
           path: ./wheelhouse/*.whl
-
-  publish:
-    name: Publish wheels to PyPI
-    needs: build_wheels
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          pattern: dist-*
-          merge-multiple: true
-          path: dist
-
-      - name: Setup python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install Twine
-        run: |
-          pip install twine
-
-      - name: Publish wheels to PyPI
-        run: twine upload dist/*
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
