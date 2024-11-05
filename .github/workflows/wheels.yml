@@ -26,7 +26,8 @@ jobs:
           python -m pip install cibuildwheel==2.21.3
 
       - name: Build wheels
-        run: python -m cibuildwheel --output-dir wheelhouse
+        run: |
+          python -m cibuildwheel --output-dir wheelhouse
         env:
           CIBW_ARCHS_MACOS: "x86_64 universal2 arm64"
           CIBW_TEST_REQUIRES: tox
