@@ -1,5 +1,11 @@
 # TgCrypto
 
+> [!NOTE]
+> The project is no longer maintained or supported. Thanks for appreciating it.
+
+> [!NOTE]
+> The implementations of the algorithms presented in this repository are to be considered for educational purposes only.
+
 > Fast and Portable Cryptography Extension Library for Pyrogram
 
 **TgCrypto** is a Cryptography Library written in C as a Python extension. It is designed to be portable, fast,
